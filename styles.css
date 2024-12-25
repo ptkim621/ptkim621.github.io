@@ -31,3 +31,38 @@ header nav ul li a {
     text-align: center;
     padding: 0;
 }
+.content > * {
+    margin: 20px;
+}
+.image-container1 {             /* For home page */
+    display: flex;             
+    justify-content: center;
+    gap: 20px;                 
+    align-items: center;          
+}
+.image-container2 {
+    display: flex;              /* Enable Flexbox */
+    justify-content: left;
+    gap: 20px;                  /* Add space between the images */
+    align-items: center;          
+}
+.responsive-image48p {
+    max-width: 48%;             /* Ensure images don't take up the full width */
+    height: auto;               /* Maintain aspect ratio */
+}
+.responsive-image30p {
+    max-width: 30%;             
+    height: auto;               
+}
+.responsive-image70p {
+    max-width: 70%;             
+    height: auto;               
+}
+.responsive-image40p {
+    max-width: 40%;             
+    height: auto;               
+}
+.responsive-image60p {
+    max-width: 60%;             
+    height: auto;               
+}

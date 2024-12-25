@@ -43,13 +43,22 @@
             <p>The K155ID1 Nixie drivers can be used, but I chose to drive them with a 4017 decade counter instead. Since these low voltage logic counters can't directly switch I used high C-E voltage BJTs (MPSA42) as switches. With 5V logic and 3.5mA of C-E current, a base resistor of 10k is sufficient.
                 Each BJT's emitter is tied to ground, the collector is tied to the corresponding cathode of the Nixie tube, and the tube's anode is tied to the 170V DC supply through the current-limiting resistor.
             </p>
+            <div class="image-container2">
+                <img src="images/170VtoNixie.png" alt="BJT to Nixie connections" class="responsive-image60p">
+                <img src="images/Nixie4017outputs.png" alt="4017 outputs to Nixie connections" class="responsive-image40p">
+            </div>
             <p>For the 170V DC supply, a switching regulator needs to be used to step up the 12V supply. For longer term use, I chose a pre-built module with a higher efficiency than one I could design myself. My goal for later is to design the switching regulator myself, and the UC3845AN, the PWM controller used on the module, would be a good basis for that design. Another idea might be directly rectifying the ac line.</p>
         </section>
 
         <section>
             <h2>Clock Logic</h2>
             <p>I decided to use 4017 10-bit decade counters as the basis for the clock logic. Every high to low transition of a clock input signal turns on the next consecutive output (0-9 available) each of which is connected to the corresponding cathode of a Nixie tube. After counting up to output 9, the counter resets the count back to 0.</p>
-            <img src="images/audioamp.jpg" alt="Logo" width="300">
+            
+            <div class="image-container2">
+                <img src="images/4017timingdiagram.png" alt="4017 timing diagram" class="responsive-image30p">
+                <img src="images/4017CLKlogic.png" alt="4017 CLK logic" class="responsive-image70p">
+            </div>
+
             <ul>
                 <li>For the first seconds digit counter (00:00:0X), the 1 Hz reference clock signal is fed into the clock input. All 10 outputs can be connected to a tube, but I omitted this.</li>
                 <li>For the second seconds digit (00:00:0X), the carry output of the first counter is fed into the clock input, which goes high after all 10 outputs have been counted through. Output 6 is tied back to the master reset of this same counter, resetting the count back to 0 after the 60 seconds of a minute. I also did not connect these outputs to a tube.</li>
@@ -58,6 +67,12 @@
                 <li>For the first hours digit (0X:00:00), output 6 of the previous counter is connected to the clock input. All 10 outputs are used and connected to a tube as a 24 hour clock.</li>
                 <li>For the second hours digit, the carry output of the previous counter is connected to the clock input. Output 2 of this counter and output 4 of the previous hours digit counter are connected to an AND gate, which resets both hour counters after the count has reached 24 hours.</li>
             </ul>
+
+            <div class="image-container2">
+                <img src="images/4060XOapplication.png" alt="4060 XO application" class="responsive-image40p">
+                <img src="images/XOsch.png" alt="XO schematic" class="responsive-image60p">
+            </div>
+
             <p>For the 1 Hz reference clock signal, I used a Pierce crystal oscillator with a 32.768 kHz crystal, a commonly used frequency in RTC applications. To divide 32.768 kHz by 2^15 to obtain 1 Hz as the reference signal, I needed a 15-bit binary counter.
                 I started with the 4060 as pins to an internal inverter amplifier are available. This sinewave is the turned into a square waveform through an inverting Schmitt trigger. If you use an external inverter for the Pierce oscillator, make sure it does not have hysteresis, but the output of the oscillator can then be fed into a Schmitt trigger.
                 Load capacitance should be determined by the crystal's datasheet to ensure resonance at the specified frequency.
@@ -65,7 +80,7 @@
             </p>
 
         </section>
-            <h2>Time Controls</h2>
+            <h2>Time Set Controls</h2>
             <p>For the fast advance controls, I connected Q10 of the 4060 (32768/2^10 = 32 Hz; other outputs can be used for a faster/slower rate) through to each of the clock inputs of the corresponding decade counter (minutes, seconds) through a momentary pushbutton.
                 Diodes were required wherever output contention could occur. For the fine advance minutes and hours controls, I used a 4011 NAND gate SR latch connected to a SPDT momentary switch for proper debouncing of the controls.
             </p>
@@ -84,20 +99,22 @@
         </section>
 
         <section>
-            <h2>Useful Links and References</h2>
+            <h2>Useful Datasheets and References</h2>
             <ul>
-                <li><a href="https://www.ti.com/lit/ds/symlink/cd4060b.pdf?HQS=dis-dk-null-digikeymode-dsf-pf-null-wwe&ts=1735084482251&ref_url=https%253A%252F%252Fwww.ti.com%252Fgeneral%252Fdocs%252Fsuppproductinfo.tsp%253FdistId%253D10%2526gotoUrl%253Dhttps%253A%252F%252Fwww.ti.com%252Flit%252Fgpn%252Fcd4060b" target="_blank">Link to TI</a></li>
-                <li>Link to Google: <a href="https://www.google.com/" target="_blank">Link to Google</a></li>
+                <li>IN-12B Datasheet: <a href="assets/IN-12A_IN-12B_03.pdf" target="blank">IN-12B</a></li>
+                <li>IN-12B Datasheet (Translated): <a href="assets/IN-12A&B_translated.pdf" target="blank">IN-12B_translated</a></li>
+                <li>4017 Decade Counter Datasheet: <a href="assets/cd74hc4017.pdf" target="blank">CD74HC4017E</a></li>
+                <li>4060 14-bit Counter Datasheet: <a href="assets/cd4060b.pdf" target="_blank">CD4060B</a></li>
+                <li>Pierce Oscillator Info: <a href="https://en.wikipedia.org/wiki/Pierce_oscillator" target="_blank">Wikipedia</a></li>
+                <li>Pierce Oscillator Good Application Notes: <a href="assets/Pierce-GateIntroduction.pdf" target="_blank">Pierce-Gate XO</a></li>
+                <li>Pierce Oscillator For MCUs: <a href="assets/cd00221665-oscillator-design-guide-for-stm8af-al-s-stm32-mcus-and-mpus-stmicroelectronics.pdf" target="_blank">ST Application Notes</a></li>
+                <li>4020 14-bit Counter Datasheet: <a href="assets/sn74hc4020.pdf" target="_blank">CD4020B</a></li>
+                <li>UC3845 PWM Controller: <a href="assets/uc3845a.pdf" target="_blank">UC3845A</a></li>
+                <li>Switch Debounce Info: <a href="https://www.digikey.com/en/articles/how-to-implement-hardware-debounce-for-switches-and-relays?msockid=270642429259612627a752bd93df607d" target="_blank">DigiKey</a></li>
+                <li>Switch Debounce Simulation: <a href="https://tinyurl.com/2b4y4m2x" target="_blank">Falstad</a></li>
             </ul>
         </section>
 
-        <section>
-            <h2>help</h2>
-            <ul>
-                <li>item1</li>
-                <li>item2</li>
-            </ul>
-        </section>
         <section class="footer-section">
             <p>&copy; 2024 ptkim621</p>
         </section>
