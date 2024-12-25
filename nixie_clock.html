@@ -19,8 +19,11 @@
     <div class="content">
         <section>
             <h2>Nixie Tube Clock</h2>
+            <div class="image-container2">
+                <img src="images/Nixieclock.jpg" alt="Nixie Clock" class="responsive-image30p">
+            </div>
             <p>I wanted to use Nixie tubes for a while now and decided to start simple by building a clock using them. I've documented issues I faced and hope this helps anyone interested in using Nixie tubes, building a similar project, or just learning something new!</p>
-        </section>
+            /section>
 
         <section>
             <h2>Features</h2>
@@ -44,8 +47,8 @@
                 Each BJT's emitter is tied to ground, the collector is tied to the corresponding cathode of the Nixie tube, and the tube's anode is tied to the 170V DC supply through the current-limiting resistor.
             </p>
             <div class="image-container2">
-                <img src="images/170VtoNixie.png" alt="BJT to Nixie connections" class="responsive-image60p">
-                <img src="images/Nixie4017outputs.png" alt="4017 outputs to Nixie connections" class="responsive-image40p">
+                <img src="images/170VtoNixie.png" alt="BJT to Nixie connections" class="responsive-image48p">
+                <img src="images/Nixie4017outputs.png" alt="4017 outputs to Nixie connections" class="responsive-image48p">
             </div>
             <p>For the 170V DC supply, a switching regulator needs to be used to step up the 12V supply. For longer term use, I chose a pre-built module with a higher efficiency than one I could design myself. My goal for later is to design the switching regulator myself, and the UC3845AN, the PWM controller used on the module, would be a good basis for that design. Another idea might be directly rectifying the ac line.</p>
         </section>
@@ -69,8 +72,9 @@
             </ul>
 
             <div class="image-container2">
-                <img src="images/4060XOapplication.png" alt="4060 XO application" class="responsive-image40p">
-                <img src="images/XOsch.png" alt="XO schematic" class="responsive-image60p">
+                <img src="images/4060XOapplication.png" alt="4060 XO application" class="responsive-image30p">
+                <img src="images/XOsch.png" alt="XO schematic" class="responsive-image40p">
+                <img src="images/32768XO.jpg" alt="XO waveform" class="responsive-image20p">
             </div>
 
             <p>For the 1 Hz reference clock signal, I used a Pierce crystal oscillator with a 32.768 kHz crystal, a commonly used frequency in RTC applications. To divide 32.768 kHz by 2^15 to obtain 1 Hz as the reference signal, I needed a 15-bit binary counter.
@@ -81,6 +85,10 @@
 
         </section>
             <h2>Time Set Controls</h2>
+            <div class="image-container2">
+                <img src="images/fastadvancectrl.png" alt="fast advance ctrl" class="responsive-image48p">
+                <img src="images/SRdebounce.png" alt="switch debounce" class="responsive-image48p">
+            </div>
             <p>For the fast advance controls, I connected Q10 of the 4060 (32768/2^10 = 32 Hz; other outputs can be used for a faster/slower rate) through to each of the clock inputs of the corresponding decade counter (minutes, seconds) through a momentary pushbutton.
                 Diodes were required wherever output contention could occur. For the fine advance minutes and hours controls, I used a 4011 NAND gate SR latch connected to a SPDT momentary switch for proper debouncing of the controls.
             </p>
@@ -94,8 +102,36 @@
 
         <section>
             <h2>Issues and Revisions</h2>
-            <p>paragraph
+            <p>One issue I found with the diode AND gate for resetting both 4017's for the hours control was that the AND gate output pulse would only go up to ~2.5V (assumedly the logic threshold voltage to reset the 4017, which is fine), but only one of the 4017's would reset, likely due to slight variations in threshold voltage and parasitics in the wiring.
+                To fix this, I implemented a monostable multivibrator to fix the output pulse duration to at least the minimum reset pulse width of 260 ns. My pulse duration was around 32 us with the components I had. Timing wasn't critical with the controls in the magnitude of hours.
             </p>
+            <div class="image-container2">
+                <img src="images/monostable.png" alt="monostable" class="responsive-image30p">
+            </div>
+            <p>I also found some wire crosstalk happening with the time set controls. Advancing the minutes would sometimes advance the hours. This was likely from the wires for these controls being pressed against the Nixie tube wires and high switching voltages inducing electric fields whenever the Nixie tubes change digits. Separating these wires resolved this issue. This should also be kept in mind if laying out these traces on a PCB.
+            </p>
+        </section>
+
+        <section>
+            <h2>Enclosure</h2>
+            <p>I found a decent off the shelf ABS plastic enclosure to house the electronics in. Soldering the hardware onto a perfboard was the longest part of this process and I would recommend making a PCB instead.
+                Spring-cage terminal blocks were pretty nice for connecting the Nixie wires to the board. I also used a 2x5.5mm barrel jack connector for the 12V input, connected to a standard wall adaptor at the back of the enclosure.
+                I hand-drilled most of the holes for the Nixie tubes, switches, and power connector, and I also left terminal blocks and space for 2 more seconds-indicator Nixie tubes in case I wanted to add them later.
+                After running the clock for around 2 days, the time was still accurate and interior temperature reached only up to max temperature of 90 degrees Fahrenheit near the switching regulator with the rest staying around a cool 70 degrees (without any ventilation holes for the enclosure).
+                The crystal's accuracy can be affected by temperature if not temperature-controlled along with a few other factors, so keeping the oscillator far from the switching regulator might be a good consideration.
+                I added a few images of the enclosure and a time-lapse of the fast advance controls down below.
+            </p>
+            <div class="image-containertopleft">
+                <img src="images/nixiecover.jpg" alt="Nixie clock cover" class="responsive-image20p">
+                <img src="images/nixieICs.jpg" alt="Nixie clock ICs" class="responsive-image30p">
+                <img src="images/nixieperfboard.jpg" alt="Nixie clock perfboard" class="responsive-image30p">
+            </div>
+            <div class="image-containerbottomleft">
+            <img src="images/nixieregulators.jpg" alt="Nixie clock regulators" class="responsive-image30p">
+            <img src="images/terminalblocks.jpg" alt="Nixie clock terminal blocks" class="responsive-image30p">
+            <img src="images/nixietimelapse.gif" alt="Nixie time lapse" class="responsive-image30p">
+            </div>
+
         </section>
 
         <section>
@@ -112,6 +148,7 @@
                 <li>UC3845 PWM Controller: <a href="assets/uc3845a.pdf" target="_blank">UC3845A</a></li>
                 <li>Switch Debounce Info: <a href="https://www.digikey.com/en/articles/how-to-implement-hardware-debounce-for-switches-and-relays?msockid=270642429259612627a752bd93df607d" target="_blank">DigiKey</a></li>
                 <li>Switch Debounce Simulation: <a href="https://tinyurl.com/2b4y4m2x" target="_blank">Falstad</a></li>
+                <li>Nixie Clock Schematic: <a href="assets/NixieClockSch.pdf" target="_blank">NixieClockSch.pdf</a></li>
             </ul>
         </section>
 

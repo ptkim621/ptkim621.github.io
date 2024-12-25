@@ -66,3 +66,24 @@ header nav ul li a {
     max-width: 60%;             
     height: auto;               
 }
+.responsive-image20p {
+    max-width: 20%;             
+    height: auto;               
+}
+
+.image-containertopleft {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    /*align-items: flex-start;      Align items to the top */
+    align-items: center;
+    gap: 20px;                   /* Optional: Add space between images */
+    padding-bottom: 10px;
+}
+.image-containerbottomleft {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    /*align-items: flex-end;       /* Align items to the bottom */
+    align-items: center;
+    gap: 20px;                   /* Optional: Add space between images */
+    padding-top: 10px;
+}
