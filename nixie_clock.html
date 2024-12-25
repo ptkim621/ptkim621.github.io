@@ -62,13 +62,34 @@
             Load capacitance should be determined by the crystal's datasheet to ensure resonance at the specified frequency.
             The 4060 is a 14-bit counter, so the final 2 Hz signal needs to be divided one more time. Unfortunately, the 4060 does not have the divide by 1 output available, so I used a separate 4020 14-bit counter for this purpose. Output A of the 4020 is then the 1 Hz reference signal.
         </p>
+
     </section>
         <h2>Time Controls</h2>
-        <p></p>
+        <p>For the fast advance controls, I connected Q10 of the 4060 (32768/2^10 = 32 Hz; other outputs can be used for a faster/slower rate) through to each of the clock inputs of the corresponding decade counter (minutes, seconds) through a momentary pushbutton.
+            Diodes were required wherever output contention could occur. For the fine advance minutes and hours controls, I used a 4011 NAND gate SR latch connected to a SPDT momentary switch for proper debouncing of the controls.
+        </p>
+
     <section>
-        <h2></h2>
+        <h2>5V DC Logic Voltage</h2>
+        <p>For the 5V supply voltage to supply all the digital IC's, I chose the 7805 linear regulator to step down the 12V supply down to 5V. To keep this regulator from getting too hot from high power consumption, I chose relatively large pullup and pulldown resistor values and attached a small aluminum heatsink, but in the end, the switching regulator ended up being the hottest component with the linear regulator staying relatively cool.
+            Even with the 7V drop across the 7805, the current draw was never more than a few mA, resulting in a power dissipation of a few mW at most.
+        </p>
     </section>
 
+    <section>
+        <h2>Issues and Revisions</h2>
+        <p>
+
+        </p>
+    </section>
+
+    <section>
+        <h2>Useful Links and References</h2>
+        <ul>
+            <li>Link to Google: <a href="https://www.google.com">Link to Google</a></li>
+            <li><a href="https://www.google.com">Link to Google2</a></li>
+        </ul>
+    </section>
 
     <footer>
         <p>&copy; 2024 ptkim621</p>
