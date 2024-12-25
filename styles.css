@@ -70,6 +70,10 @@ header nav ul li a {
     max-width: 20%;             
     height: auto;               
 }
+.responsive-image25p {
+    max-width: 25%;             
+    height: auto;               
+}
 
 .image-containertopleft {
     display: flex;
