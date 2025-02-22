@@ -135,6 +135,27 @@
 
         </section>
 
+    </section>
+
+
+    <section>
+        <h2>Boost Converter</h2>
+        <p>I also wanted to try designing a 12V to 180V boost converter for the Nixie tubes. I chose the monolithic MC34063 switching converter IC with an external switching network for higher currents, max current limiting of ~2.5A, and designed for a  
+            current output of ~ 50mA at 180VDC. The Nixie tubes draw 2-3mA each, so for 6 digits, the current draw would be around 18mA max. With my current setup (4 digits), current draw would be closer to 12mA. With the current biasing network, the output voltage
+            comes out to be 175V. Power efficiency was determined as 74.199% with a 12mA load and 73.946% at a 20mA load. Schematic and layouts were made in Altium and the PCB was manufactured by JLCPCB. There were only a few components, so the PCB was hand-soldered.
+        </p>
+        <div class="image-containertopleft">
+            <img src="images/Nixie_Boost_Sch.PDF" alt="Boost converter schematic" class="responsive-image20p">
+            <img src="images/Nixie_Boost_Layout.png" alt="Boost converter layout" class="responsive-image30p">
+            <img src="images/Nixie_Boost_3DPCB.png" alt="Boost converter 3D layout" class="responsive-image30p">
+        </div>
+        <div class="image-containerbottomleft">
+        <img src="images/BoostPCB.jpg" alt="Nixie boost converter" class="responsive-image30p">
+        <img src="images/PowerEfficiencyMeas.jpg" alt="Boost converter power efficiency measurments" class="responsive-image30p">
+        </div>
+
+    </section>
+
         <section>
             <h2>Useful Datasheets and References</h2>
             <ul>
